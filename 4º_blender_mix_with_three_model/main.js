@@ -1,17 +1,18 @@
 import * as THREE from 'three';
 import * as utils from './utils.js';
-import {lines, animateGridPerlinNoise} from './grid.js';
+import Grid from './grid.js';
 
 let { scene, camera, renderer, controls } = utils.setupOrbitalScene()
 
-scene.add(lines);
+let grid = new Grid(100, 10);
+scene.add(grid.lines);
 
 // Move the camera
 camera.position.z = 5;
 
 function animate() {
     requestAnimationFrame(animate);
-    animateGridPerlinNoise();
+    grid.animateGridPerlinNoise();
     controls.update();
     renderer.render(scene, camera);
 }
