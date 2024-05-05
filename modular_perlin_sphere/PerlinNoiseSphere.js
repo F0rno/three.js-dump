@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import * as shaders from './webGL_shaders';
 
 class PerlinNoiseSphere {
   constructor() {
@@ -15,8 +16,8 @@ class PerlinNoiseSphere {
         fragment: { type: "i", value: true },
         redhell: { type: "i", value: true }
       },
-      vertexShader: document.getElementById('vertexShader').textContent,
-      fragmentShader: document.getElementById('fragmentShader').textContent
+      vertexShader: shaders.vertexShader,
+      fragmentShader: shaders.fragmentShader
     });
 
     var geo = new THREE.IcosahedronGeometry(3, 100);
