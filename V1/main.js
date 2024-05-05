@@ -1,9 +1,8 @@
 import * as THREE from 'three';
 import * as utils from './utils.js';
 import Grid from './grid.js';
-import { GLTFLoader } from 'three/examples/jsm/Addons.js';
+import PerlinNoiseSphere from './PerlinNoiseSphere.js';
 
-const loader = new GLTFLoader();
 let { scene, camera, renderer, controls } = utils.setupOrbitalScene()
 
 let grid = new Grid(100, 400);
@@ -11,21 +10,20 @@ scene.add(grid.getGrid());
 // Set the grid to "floor" rotation
 grid.setRotation(Math.PI / 2, 0, 0);
 
-loader.load('./scene.gltf', function ( gltf ) {
-    scene.add( gltf.scene );
-    // Move scene a little bit to botton
-    gltf.scene.position.y = -6;
-    // Reduce size of the scene
-    gltf.scene.scale.set(0.1, 0.1, 0.1);
-});
+// Add PerlinNoiseSphere
+let perlinSphere = new PerlinNoiseSphere();
+scene.add(perlinSphere.mesh);
+perlinSphere.setPosition(0, 25, 0);
+perlinSphere.increaseSize(4);
 
-// Move the camera
+// Set camera position
 camera.position.z = 5;
 camera.position.y = 200;
 
 function animate() {
     requestAnimationFrame(animate);
     grid.animateGridPerlinNoise();
+    perlinSphere.animate();
     controls.update();
     renderer.render(scene, camera);
 }
