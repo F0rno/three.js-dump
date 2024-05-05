@@ -8,14 +8,25 @@ class Grid {
         this.squareSize = squareSize;
         this.xSize = gridSize;
         this.ySize = gridSize;
-        this.n = this.xSize * this.ySize;
+        this.size = this.xSize * this.ySize;
         this.geometry = new THREE.BufferGeometry();
         this.positions = [];
-        this.t = 0;
+        this.time = 0;
+        this.speed = 0.003;
 
         this.initPositions();
         this.initIndexPairs();
         this.lines = new THREE.LineSegments(this.geometry, new THREE.LineBasicMaterial());
+    }
+
+    setRotation(x, y, z) {
+        this.lines.rotation.x = x;
+        this.lines.rotation.y = y;
+        this.lines.rotation.z = z;
+    }
+
+    getGrid() {
+        return this.lines;
     }
 
     mapTo2D(i) {
@@ -29,7 +40,7 @@ class Grid {
     }
 
     initPositions() {
-        for (let i = 0; i < this.n; i++) {
+        for (let i = 0; i < this.size; i++) {
             let p = this.mapTo2D(i);
             let noiseX = this.noise.perlin2(p.x / 100, p.y / 100);
             let noiseY = this.noise.perlin2(p.y / 100, p.x / 100);
@@ -44,7 +55,7 @@ class Grid {
 
     initIndexPairs() {
         let indexPairs = [];
-        for (let i = 0; i < this.n; i++) {
+        for (let i = 0; i < this.size; i++) {
             let p = this.mapTo2D(i);
             if (p.x + 1 < this.xSize) {
                 indexPairs.push(i);
@@ -59,14 +70,14 @@ class Grid {
     }
 
     animateGridPerlinNoise() {
-        if (this.t >= 10) {
-            this.t = 0;
+        if (this.time >= 10) {
+            this.time = 0;
         }
-        this.t += 0.005;
-        for (let i = 0; i < this.n; i++) {
+        this.time += this.speed;
+        for (let i = 0; i < this.size; i++) {
             let p = this.mapTo2D(i);
-            let noiseX = this.noise.perlin2(p.x / 10 + this.t, p.y / 10 + this.t);
-            let noiseY = this.noise.perlin2(p.y / 10 + this.t, p.x / 10 + this.t);
+            let noiseX = this.noise.perlin2(p.x / 10 + this.time, p.y / 10 + this.time);
+            let noiseY = this.noise.perlin2(p.y / 10 + this.time, p.x / 10 + this.time);
             this.positions[3 * i] = (p.x - this.xSize / 2 + noiseX) * this.squareSize / this.xSize;
             this.positions[3 * i + 1] = (p.y - this.ySize / 2 + noiseY) * this.squareSize / this.ySize;
         }
