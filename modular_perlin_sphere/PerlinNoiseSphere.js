@@ -63,6 +63,10 @@ class PerlinNoiseSphere {
   getMesh() {
     return this.mesh;
   }
+
+  increaseSize(factor) {
+    this.mesh.scale.multiplyScalar(factor);
+  }
 }
 
 export default PerlinNoiseSphere;
