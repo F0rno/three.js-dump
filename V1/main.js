@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import * as utils from './utils.js';
 import Grid from './grid.js';
 import PerlinNoiseSphere from './PerlinNoiseSphere.js';
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
+
 
 let { scene, camera, renderer, controls } = utils.setupOrbitalScene()
 
@@ -15,10 +17,29 @@ let perlinSphere = new PerlinNoiseSphere();
 scene.add(perlinSphere.mesh);
 perlinSphere.setPosition(0, 25, 0);
 perlinSphere.increaseSize(4);
+perlinSphere.switchToStandardMaterial();
 
 // Set camera position
 camera.position.z = 5;
 camera.position.y = 200;
+
+let exporter = new GLTFExporter();
+function exportScene() {
+    exporter.parse(scene, function (gltf) {
+        let blob = new Blob([JSON.stringify(gltf)], { type: 'application/json' });
+        let url = URL.createObjectURL(blob);
+        let link = document.createElement('a');
+        link.href = url;
+        link.download = "xd.gltf";
+        link.click();
+    });
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'e') {
+        exportScene();
+    }
+});
 
 function animate() {
     requestAnimationFrame(animate);
