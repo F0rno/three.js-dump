@@ -70,10 +70,12 @@ class Grid {
     }
 
     animateGridPerlinNoise() {
-        if (this.time >= 10) {
+        // FIX: The time should go backwards instead of stop and reset
+        if (this.time > 10) {
             this.time = 0;
+        } else { 
+            this.time += this.speed;
         }
-        this.time += this.speed;
         for (let i = 0; i < this.size; i++) {
             let p = this.mapTo2D(i);
             let noiseX = this.noise.perlin2(p.x / 10 + this.time, p.y / 10 + this.time);

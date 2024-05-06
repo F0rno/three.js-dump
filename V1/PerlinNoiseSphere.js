@@ -28,7 +28,7 @@ class PerlinNoiseSphere {
       perlin: {
         vel: 0.002,
         speed: 0.0001488884648937542,
-        perlins: 1.0,
+        perlins: 2.0, // Size in the control panel
         decay: 1,
         complex: 0.30,
         waves: 20.0,
